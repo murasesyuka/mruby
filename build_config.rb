@@ -11,6 +11,8 @@ MRuby::Build.new do |conf|
   # conf.gem :github => 'masuidrive/mrbgems-example', :branch => 'master'
   # conf.gem :git => 'git@github.com:masuidrive/mrbgems-example.git', :branch => 'master', :options => '-v'
 
+  conf.gem 'examples/mrbgems/mruby-numeric-udiv'
+  
   # Use standard Kernel#sprintf method
   conf.gem "#{root}/mrbgems/mruby-sprintf"
 
