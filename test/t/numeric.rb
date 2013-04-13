@@ -26,3 +26,7 @@ end
 assert('Numeric#**') do
   2.0**3 == 8.0
 end
+
+assert('Integer#udiv') do
+  4.udiv 3 == 1
+end

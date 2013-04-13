@@ -776,6 +776,29 @@ fix_mul(mrb_state *mrb, mrb_value x)
   return mrb_fixnum_mul(mrb, x, y);
 }
 
+
+static mrb_value
+fix_udiv(mrb_state *mrb, mrb_value x)
+{
+  mrb_value y;
+  mrb_int a, b;
+
+  mrb_get_args(mrb, "o", &y);
+  a = mrb_fixnum(x);
+  
+  if (mrb_fixnum_p(y) && (b=mrb_fixnum(y)) != 0) {
+    if (mrb_fixnum(y) == 0) {
+      return mrb_float_value(str_to_mrb_float("nan"));
+    }
+    b = mrb_fixnum(y);
+    return mrb_fixnum_value(a / b);
+  }
+  else {
+    return mrb_fixnum_value(0);
+  }
+}
+
+
 static void
 fixdivmod(mrb_state *mrb, mrb_int x, mrb_int y, mrb_int *divp, mrb_int *modp)
 {
@@ -1379,6 +1402,8 @@ mrb_init_numeric(mrb_state *mrb)
   mrb_define_method(mrb, fixnum,  "-",        fix_minus,         ARGS_REQ(1)); /* 15.2.8.3.2  */
   mrb_define_method(mrb, fixnum,  "-@",       fix_uminus,        ARGS_REQ(1)); /* 15.2.7.4.2  */
   mrb_define_method(mrb, fixnum,  "*",        fix_mul,           ARGS_REQ(1)); /* 15.2.8.3.3  */
+  //mrb_define_method(mrb, fixnum,  "/",        fix_udiv,          ARGS_REQ(1));
+  mrb_define_method(mrb, fixnum,  "udiv",     fix_udiv,          ARGS_REQ(1));
   mrb_define_method(mrb, fixnum,  "%",        fix_mod,           ARGS_REQ(1)); /* 15.2.8.3.5  */
   mrb_define_method(mrb, fixnum,  "==",       fix_equal,         ARGS_REQ(1)); /* 15.2.8.3.7  */
   mrb_define_method(mrb, fixnum,  "~",        fix_rev,           ARGS_NONE()); /* 15.2.8.3.8  */
