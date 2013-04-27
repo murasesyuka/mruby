@@ -8,6 +8,7 @@
 
 #define RITEBIN_EXT ".mrb"
 #define C_EXT       ".c"
+
 void mrb_show_version(mrb_state *);
 void mrb_show_copyright(mrb_state *);
 void parser_dump(mrb_state*, struct mrb_ast_node*, int);
@@ -31,7 +32,7 @@ usage(const char *name)
   "switches:",
   "-c           check syntax only",
   "-o<outfile>  place the output into <outfile>",
-  "-v           print version number, then trun on verbose mode",
+  "-v           print version number, then turn on verbose mode",
   "-g           produce debugging information",
   "-B<symbol>   binary <symbol> output in C language format",
   "--verbose    run at verbose mode",
@@ -42,8 +43,8 @@ usage(const char *name)
   const char *const *p = usage_msg;
 
   printf("Usage: %s [switches] programfile\n", name);
-  while(*p)
-  printf("  %s\n", *p++);
+  while (*p)
+    printf("  %s\n", *p++);
 }
 
 static char *
@@ -106,7 +107,7 @@ parse_args(mrb_state *mrb, int argc, char **argv, struct _args *args)
         args->check_syntax = 1;
         break;
       case 'v':
-        if(!args->verbose) mrb_show_version(mrb);
+        if (!args->verbose) mrb_show_version(mrb);
         args->verbose = 1;
         break;
       case 'g':
@@ -162,7 +163,8 @@ parse_args(mrb_state *mrb, int argc, char **argv, struct _args *args)
       goto exit;
     }
   }
- exit:
+
+exit:
   if (outfile && infile != outfile) mrb_free(mrb, outfile);
   return result;
 }

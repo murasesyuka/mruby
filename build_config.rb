@@ -43,15 +43,31 @@ MRuby::Build.new do |conf|
   # Use extensional Hash class
   conf.gem "#{root}/mrbgems/mruby-hash-ext"
 
+  # Use extensional Range class
+  conf.gem "#{root}/mrbgems/mruby-range-ext"
+
+  # Use extensional Proc class
+  conf.gem "#{root}/mrbgems/mruby-proc-ext"
+
+  # Use extensional Symbol class
+  conf.gem "#{root}/mrbgems/mruby-symbol-ext"
+
   # Use Random class
   conf.gem "#{root}/mrbgems/mruby-random"
-  
+
   # No use eval method
   # conf.gem "#{root}/mrbgems/mruby-eval"
 
 
   # Generate binaries
-  # conf.bins = %w(mrbc mruby mirb)
+  # conf.bins = %w(mrbc)
+
+  # Generate mirb command
+  conf.gem "#{root}/mrbgems/mruby-bin-mirb"
+
+  # Generate mruby command
+  conf.gem "#{root}/mrbgems/mruby-bin-mruby"
+
 
   # C compiler settings
   # conf.cc do |cc|

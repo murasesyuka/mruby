@@ -72,6 +72,35 @@ mrb_intern_str(mrb_state *mrb, mrb_value str)
   return mrb_intern2(mrb, RSTRING_PTR(str), RSTRING_LEN(str));
 }
 
+mrb_value
+mrb_check_intern(mrb_state *mrb, const char *name, size_t len)
+{
+  khash_t(n2s) *h = mrb->name2sym;
+  symbol_name sname;
+  khiter_t k;
+
+  sname.len = len;
+  sname.name = name;
+
+  k = kh_get(n2s, h, sname);
+  if (k != kh_end(h)) {
+    return mrb_symbol_value(kh_value(h, k));
+  }
+  return mrb_nil_value();
+}
+
+mrb_value
+mrb_check_intern_cstr(mrb_state *mrb, const char *name)
+{
+  return mrb_check_intern(mrb, name, strlen(name));
+}
+
+mrb_value
+mrb_check_intern_str(mrb_state *mrb, mrb_value str)
+{
+  return mrb_check_intern(mrb, RSTRING_PTR(str), RSTRING_LEN(str));
+}
+
 /* lenp must be a pointer to a size_t variable */
 const char*
 mrb_sym2name_len(mrb_state *mrb, mrb_sym sym, size_t *lenp)
@@ -417,11 +446,11 @@ mrb_init_symbol(mrb_state *mrb)
 
   sym = mrb->symbol_class = mrb_define_class(mrb, "Symbol", mrb->object_class);
 
-  mrb_define_method(mrb, sym, "===",             sym_equal,               ARGS_REQ(1));              /* 15.2.11.3.1  */
-  mrb_define_method(mrb, sym, "id2name",         mrb_sym_to_s,            ARGS_NONE());              /* 15.2.11.3.2  */
-  mrb_define_method(mrb, sym, "to_s",            mrb_sym_to_s,            ARGS_NONE());              /* 15.2.11.3.3  */
-  mrb_define_method(mrb, sym, "to_sym",          sym_to_sym,              ARGS_NONE());              /* 15.2.11.3.4  */
-  mrb_define_method(mrb, sym, "inspect",         sym_inspect,             ARGS_NONE());              /* 15.2.11.3.5(x)  */
-  mrb_define_method(mrb, sym, "<=>",             sym_cmp,                 ARGS_REQ(1));
+  mrb_define_method(mrb, sym, "===",             sym_equal,      MRB_ARGS_REQ(1));              /* 15.2.11.3.1  */
+  mrb_define_method(mrb, sym, "id2name",         mrb_sym_to_s,   MRB_ARGS_NONE());              /* 15.2.11.3.2  */
+  mrb_define_method(mrb, sym, "to_s",            mrb_sym_to_s,   MRB_ARGS_NONE());              /* 15.2.11.3.3  */
+  mrb_define_method(mrb, sym, "to_sym",          sym_to_sym,     MRB_ARGS_NONE());              /* 15.2.11.3.4  */
+  mrb_define_method(mrb, sym, "inspect",         sym_inspect,    MRB_ARGS_NONE());              /* 15.2.11.3.5(x)  */
+  mrb_define_method(mrb, sym, "<=>",             sym_cmp,        MRB_ARGS_REQ(1));
   mrb->init_sym = mrb_intern(mrb, "initialize");
 }
